@@ -1,20 +1,36 @@
-<form class="adding-form">
+<form class="adding-form" [formGroup]="AddNewZoneGroup">
     <mat-form-field class="form-item">
-        <mat-label>Time zone</mat-label>
+        <mat-label>Часовой пояс</mat-label>
         <input matInput id="offset" formControlName="offset">
+        <mat-hint>Часовой пояс должен принимать значения от -12 до +12</mat-hint>
+        <mat-error *ngIf='this.AddNewZoneGroup.controls["offset"].invalid
+        && this.AddNewZoneGroup.controls["offset"].dirty'>
+            Неверно введен часовой пояс
+        </mat-error>
+        <mat-error *ngIf='this.AddNewZoneGroup.controls["offset"].touched'>
+            Это поле обязательно для заполнения
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-item">
-        <mat-label>City</mat-label>
+        <mat-label>Город</mat-label>
         <input matInput id="city" formControlName="city">
+        <mat-hint>Название города должно содержать до 40 символов</mat-hint>
+        <mat-error *ngIf='this.AddNewZoneGroup.controls["city"].invalid 
+        && this.AddNewZoneGroup.controls["city"].dirty'>
+            Название не должно превышать 40 символов
+        </mat-error>
+        <mat-error *ngIf='this.AddNewZoneGroup.controls["city"].touched'>
+            Это поле обязательно для заполнения
+        </mat-error>
     </mat-form-field>
 
     <div>
-        <ng-container>
+        <ng-container *ngIf='this.AddNewZoneGroup.invalid; else Valid'>
             <button mat-raised-button color="primary" disabled>Add new zone</button>
         </ng-container>
-        <ng-template>
-
+        <ng-template #Valid>
+            <button mat-raised-button color="primary">Add new zone</button>
         </ng-template>
     </div>
 </form>
