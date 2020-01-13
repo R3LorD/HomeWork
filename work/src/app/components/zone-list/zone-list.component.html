@@ -1,1 +1,43 @@
-<p>zone-list works!</p>
+<form >
+    <mat-form-field class="search">
+        <mat-label>Поиск</mat-label>
+        <input matInput [matAutocomplete]="auto" [formControl]="cityInput">
+        <mat-autocomplete (optionSelected)="GotSearch($event)" autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredZoneSearch | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>
+
+<ng-container class="zone-list" *ngIf='this.searchedZone == null; else ShowSearchedZone'>
+    <div *ngFor='let zone of this.timeZoneList' class="current-zone">
+        <div class="zone-el">
+            Временная зона {{zone.offset}}
+        </div>
+        <div class="zone-el">
+            Город {{zone.city}}
+        </div>
+        <div class="zone-el buttons">
+            <button [routerLink]='"edit/" + zone.id'
+            class='edit-btn' mat-raised-button>Изменить</button>
+            <button (click)='deleteZone(zone.id)' class='del-btn' mat-raised-button color="warn">Удалить</button>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #ShowSearchedZone>
+    <div class="current-zone">
+        <div class="zone-el">
+            Временная зона {{searchedZone.offset}}
+        </div>
+        <div class="zone-el">
+            Город {{searchedZone.city}}
+        </div>
+        <div class="zone-el buttons">
+            <button [routerLink]='"edit/" + zone.id'
+            class='edit-btn' mat-raised-button>Изменить</button>
+            <button (click)='deleteZone(zone.id)' class='del-btn' mat-raised-button color="warn">Удалить</button>
+        </div>
+    </div>
+</ng-template>

@@ -25,4 +25,8 @@ export class AddZoneComponent implements OnInit {
     ])
   });
 
+  addZone(){
+    this.timeService.addNewZone(this.AddNewZoneGroup.controls['city'].value,
+    this.AddNewZoneGroup.controls['offset'].value);
+  }
 }
