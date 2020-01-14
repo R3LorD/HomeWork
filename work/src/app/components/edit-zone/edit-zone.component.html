@@ -1,1 +1,44 @@
-<p>edit-zone works!</p>
+<form class="edit-form" [formGroup]="EditZoneGroup">
+    <mat-form-field class="form-item">
+        <mat-label>Часовой пояс<b> *</b></mat-label>
+        <input matInput id="offset" formControlName="offset">
+        <mat-hint>Часовой пояс должен принимать значения от -12 до +12. Например: +0</mat-hint>
+        <mat-error *ngIf='this.EditZoneGroup.controls["offset"].invalid
+        && this.EditZoneGroup.controls["offset"].dirty'>
+            Неверно введен часовой пояс
+        </mat-error>
+        <mat-error *ngIf='this.EditZoneGroup.controls["offset"].touched'>
+            Это поле обязательно для заполнения
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-item">
+        <mat-label>Город<b> *</b></mat-label>
+        <input matInput id="city" formControlName="city">
+        <mat-hint>Название города должно содержать до 40 символов. Например: Москва</mat-hint>
+        <mat-error *ngIf='this.EditZoneGroup.controls["city"].invalid 
+        && this.EditZoneGroup.controls["city"].dirty'>
+            Название не должно превышать 40 символов
+        </mat-error>
+        <mat-error *ngIf='this.EditZoneGroup.controls["city"].touched'>
+            Это поле обязательно для заполнения
+        </mat-error>
+    </mat-form-field>
+
+
+    <div class="buttons">
+        <button routerLink="" mat-raised-button>
+            Decline
+        </button>
+        <ng-container *ngIf="this.EditZoneGroup.invalid; else Valid">
+            <button mat-flat-button disabled>
+                Save
+            </button>
+        </ng-container>
+        <ng-template #Valid>
+            <button mat-raised-button style="background-color: rgb(17, 199, 17); color: white;" (click)="updateZone()">
+                Save
+            </button>
+        </ng-template>
+    </div>
+</form>

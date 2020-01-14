@@ -15,6 +15,11 @@ export class ZoneSerService {
     }
   }
 
+  updateZone(id: number, newCity: string, newOffset: number){
+    this.TimeZones.find(el => el.id === id).city = newCity;
+    this.TimeZones.find(el => el.id === id).offset = newOffset;
+  }
+
   delZone(id: number){
     const deletingZone = this.TimeZones.indexOf(this.TimeZones.find(el => el.id == id));
     this.TimeZones.splice(deletingZone, 1);
