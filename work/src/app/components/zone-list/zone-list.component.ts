@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ZoneSerService } from 'src/app/service/zone-ser.service';
 import { TimeZone } from 'src/app/models/timeZone.model';
 import { FormControl } from '@angular/forms';
@@ -12,13 +12,15 @@ import { map, startWith } from 'rxjs/operators';
 })
 export class ZoneListComponent implements OnInit {
   
-  constructor(private timeService: ZoneSerService) { }
+  constructor(private timeService: ZoneSerService,
+    private cdr: ChangeDetectorRef) { }
   
   timeZoneList = new Array<TimeZone>();
   cityInput = new FormControl();
   filteredZoneSearch: Observable<string[]>;
   cities: string[] = [];
   searchedZone: TimeZone = null;
+  detectChangesInterval;
 
 
   ngOnInit() {
@@ -35,7 +37,32 @@ export class ZoneListComponent implements OnInit {
 
 
     console.log(this.filteredZoneSearch);
-    
+    this.detectChangesInterval = setInterval(() => { this.cdr.detectChanges(); }, 1000);
+  }
+
+
+  getTimeWithOffset(offset: number): string {
+    const returingTime: Date = new Date(Date.now());
+    returingTime.setHours(returingTime.getHours() + (+offset + +returingTime.getTimezoneOffset() / 60));
+    let returtingString = '';
+    if (returingTime.getHours() < 10) {
+      returtingString += '0' + returingTime.getHours().toString() + ':';
+    } else {
+      returtingString += returingTime.getHours().toString() + ':';
+    }
+
+    if (returingTime.getMinutes() < 10) {
+      returtingString += '0' + returingTime.getMinutes().toString() + ':';
+    } else {
+      returtingString += returingTime.getMinutes().toString() + ':';
+    }
+
+    if (returingTime.getSeconds() < 10) {
+      returtingString += '0' + returingTime.getSeconds().toString();
+    } else {
+      returtingString += returingTime.getSeconds().toString();
+    }
+    return returtingString;
   }
 
 
@@ -73,5 +100,10 @@ export class ZoneListComponent implements OnInit {
 
   GotSearch(ev){
     this.searchedZone = this.timeZoneList.find(el => el.city === ev.option.value);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.detectChangesInterval);
+    
   }
 }

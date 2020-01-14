@@ -12,6 +12,9 @@
 
 <ng-container class="zone-list" *ngIf='this.searchedZone == null; else ShowSearchedZone'>
     <div *ngFor='let zone of this.timeZoneList' class="current-zone">
+        <div>
+            Current local time: {{getTimeWithOffset(zone.offset)}}
+        </div>
         <div class="zone-el">
             Временная зона {{zone.offset}}
         </div>
@@ -28,6 +31,9 @@
 
 <ng-template #ShowSearchedZone>
     <div class="current-zone">
+        <div>
+            Current local time: {{getTimeWithOffset(searchedZone.offset)}}
+        </div>
         <div class="zone-el">
             Временная зона {{searchedZone.offset}}
         </div>
